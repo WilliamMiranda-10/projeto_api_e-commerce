@@ -37,7 +37,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   await new UserRepository().deleteUser(id);
-  res.status(200).send("Usuario deletado");
+  res.status(200).send("Usuário deletado");
 });
 
 export default router;

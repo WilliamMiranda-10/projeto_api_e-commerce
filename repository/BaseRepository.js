@@ -94,10 +94,3 @@ class BaseRepository {
 
 export default BaseRepository;
 
-// INSERT INTO users (name, surname, email, password)
-// VALUES ('Bruna', 'Alves', 'Bruna10@gmail.com', 'senai6844');
-
-// UPDATE users SET name = 'Vilma', surname = 'Maria', email = 'vilma601@gmail.com', password = '601linha'
-// WHERE id = 'c9e007a9-acaa-4ed9-a346-9240207e2f1a'
-
-// DELETE FROM users WHERE id = '9b46f571-74aa-4819-9b50-c2c382df60fa'
