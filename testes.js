@@ -1,8 +1,8 @@
-const body = {
-  name: "Iphone",
-  price_in_cents: 3599,
-  size: "256gb",
-};
+// const body = {
+//   name: "Iphone",
+//   price_in_cents: 3599,
+//   size: "256gb",
+// };
 
 // const id = '11sx1s321xdsw23x1320'
 
@@ -19,15 +19,25 @@ const body = {
 
 // console.log(columns)
 
-const columnsArray = ["name", "price_in_cents", "size"];
-const valuesArray = columnsArray.reduce((acc, colunmsName) => {
-  acc.push(body[colunmsName]);
-  return acc;
-}, []);
+// const columnsArray = ["name", "price_in_cents", "size"];
+// const valuesArray = columnsArray.reduce((acc, colunmsName) => {
+//   acc.push(body[colunmsName]);
+//   return acc;
+// }, []);
 
-const valuesArray2 = columnsArray.map((colunmsName) => body[colunmsName]);
+// const valuesArray2 = columnsArray.map((colunmsName) => body[colunmsName]);
 
-console.log(valuesArray2);
+// console.log(valuesArray2);
 
 
 
+  const userData = {
+    nome,
+    surname,
+    email,
+    password: passwordHash,
+  };
+
+  const valuesArray3 = Object.keys(userData);
+
+console.log(valuesArray3)
