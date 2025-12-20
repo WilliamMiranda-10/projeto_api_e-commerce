@@ -17,16 +17,6 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", createUser);
 
-  // const { body } = req;
-  // const columnsArray = ["name", "surname", "email", "password"];
-  // const valuesArray = columnsArray.reduce((acc, columnName) => {
-  //   acc.push(body[columnName]);
-  //   return acc;
-  // }, []);
-  // await new UserRepository().insertInto(valuesArray);
-  // console.log("VALUES:", valuesArray);
-  // res.status(200).send("ok");
-
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;

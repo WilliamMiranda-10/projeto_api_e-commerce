@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ProductRepository from "../repository/ProductsRepository.js";
+import { authMiddlewares } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
@@ -14,7 +15,7 @@ router.get("/:id", async (req, res) => {
   res.json(result);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authMiddlewares, async (req, res) => {
   const { body } = req;
   const columnsArray = ["name", "price_in_cents", "size"];
   const valuesArray = columnsArray.map((columnsName) => body[columnsName]);
@@ -22,17 +23,19 @@ router.post("/", async (req, res) => {
   res.json(result);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", authMiddlewares, async (req, res) => {
   const { body } = req;
   const { id } = req.params;
-  const result = await new ProductRepository().updateUser(body, id);
+  const result = await new ProductRepository().updateProduct(body, id);
   res.status(200).send(result);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authMiddlewares, async (req, res) => {
   const { id } = req.params;
-  await new ProductRepository().deleteUser(id);
-  res.send('Usuario excluido')
+  await new ProductRepository().deleteProduct(id);
+  res.send("Usuário excluido");
 });
 
 export default router;
+
+

@@ -32,5 +32,6 @@ export async function login(req, res) {
     email: user.email,
   });
 
-  res.json({ token });
+  res.json({message : "Login realizado com sucesso!", token});
 }
+

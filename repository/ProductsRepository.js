@@ -38,17 +38,17 @@ class ProductRepository extends BaseRepository {
         throw error;
       }
     }
-    async updateUser(body, id) {
+    async updateProduct(body, id) {
       try {
-        const result = await super.updateUser("products", body, id);
+        const result = await super.updateProduct("products", body, id);
         return result;
       } catch (error) {
         throw error;
       }
     }
-    async deleteUser(id) {
+    async deleteProduct(id) {
       try {
-        const result = await super.deleteUser("products", id);
+        const result = await super.deleteProduct("products", id);
         return result;
       } catch (error) {
         throw error;

@@ -2,6 +2,7 @@ import { hashPassword } from "../services/passwordService.js";
 import UserRepository from "../repository/UserRepository.js";
 
 export async function createUser(req, res) {
+  
   const { name, surname, email, password } = req.body;
 
   if (!name || !surname || !email || !password) {
