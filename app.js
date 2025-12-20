@@ -19,10 +19,6 @@ app.use("/profile", authMiddlewares, (req, res) => {
 });
 app.use("/", loginRouter )
 
-
-const port = 3000;
-
-app.listen(port, () => console.log("Api rodando na porta ", port));
-
+export default app
 
 

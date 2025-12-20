@@ -1,4 +1,4 @@
-import pool from "./db.js";
+import pool from "../config/db.js";
 import BaseRepository from "./BaseRepository.js";
 
 class PurchasesRepository extends BaseRepository {
@@ -17,15 +17,12 @@ class PurchasesRepository extends BaseRepository {
 
       const flags = values.map((_, index) => `$${index + 1}`);
 
-
       const purchasesQuery = `INSERT INTO purchases (${columns.join(
         ", "
       )}) VALUES (${flags.join(", ")}) RETURNING id`;
 
-
       const purchasesResult = await client.query(purchasesQuery, values);
       const purchaseId = purchasesResult.rows[0].id;
-
 
       for (const item of products) {
         const purchasesProductsQuery = ` INSERT INTO purchasesproducts (purchases_id, products_id, product_amount)
@@ -34,22 +31,20 @@ class PurchasesRepository extends BaseRepository {
         await client.query(purchasesProductsQuery, [
           purchaseId,
           item.product_id,
-          item.product_amount
+          item.product_amount,
         ]);
       }
 
-      await client.query("COMMIT")
+      await client.query("COMMIT");
 
-      return { purchaseId }
-
+      return { purchaseId };
     } catch (error) {
-      await client.query('ROLLBACK')
-      throw error
-    } finally{
-      client.release()
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
     }
   }
 }
 
-
-export default PurchasesRepository
+export default PurchasesRepository;

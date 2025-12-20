@@ -1,4 +1,4 @@
-import pool from "./db.js";
+import pool from "../config/db.js";
 
 class BaseRepository {
   async getAll(table, columnsArray) {
@@ -93,4 +93,3 @@ class BaseRepository {
 }
 
 export default BaseRepository;
-

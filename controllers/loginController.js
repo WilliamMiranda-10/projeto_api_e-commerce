@@ -1,6 +1,6 @@
-import pool from "../repository/db.js";
-import { comparePassword } from "../services/passwordService.js";
-import { gerarToken } from "../services/tokenService.js";
+import pool from "../config/db.js";
+import { comparePassword } from "../utils/hashPassword.js";
+import { gerarToken } from "../utils/jwt.js";
 
 export async function login(req, res) {
   const { email, password } = req.body;
@@ -32,6 +32,5 @@ export async function login(req, res) {
     email: user.email,
   });
 
-  res.json({message : "Login realizado com sucesso!", token});
+  res.json({ message: "Login realizado com sucesso!", token });
 }
-

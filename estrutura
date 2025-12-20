@@ -1,0 +1,40 @@
+src/
+├── app.js
+├── server.js
+├── config/
+│   ├── db.js
+│   └── env.js
+├── routes/
+│   ├── userRoutes.js
+│   ├── productRoutes.js
+│   ├── purchaseRoutes.js
+│   └── authRoutes.js
+├── controllers/
+│   ├── UserController.js
+│   ├── ProductController.js
+│   ├── PurchaseController.js
+│   └── AuthController.js
+├── services/
+│   ├── UserService.js
+│   ├── ProductService.js
+│   ├── PurchaseService.js
+│   └── AuthService.js
+├── repositories/
+│   ├── BaseRepository.js
+│   ├── UserRepository.js
+│   ├── ProductRepository.js
+│   └── PurchaseRepository.js
+├── middlewares/
+│   ├── authMiddleware.js
+│   ├── errorMiddleware.js
+│   └── validateMiddleware.js
+├── utils/
+│   ├── jwt.js
+│   ├── hashPassword.js
+│   └── httpStatus.js
+├── validations/
+│   ├── userSchema.js
+│   ├── productSchema.js
+│   └── purchaseSchema.js
+└── docs/
+    └── swagger.js
