@@ -1,5 +1,5 @@
-import pg from "pg";
 import "dotenv/config";
+import pg from "pg";
 
 
 const pool = new pg.Pool({
@@ -10,6 +10,4 @@ const pool = new pg.Pool({
   database: process.env.DB_DATABASE,
 });
 
-
 export default pool;
-

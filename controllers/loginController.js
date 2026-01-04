@@ -1,4 +1,4 @@
-import pool from "../config/db.js";
+import pool from "../repository/db.js";
 import { comparePassword } from "../utils/hashPassword.js";
 import { gerarToken } from "../utils/jwt.js";
 
@@ -18,9 +18,9 @@ export async function login(req, res) {
     return res.status(401).json({ message: "Email ou senha inválidas!" });
   }
 
-  // pegar usuario
+
   const user = result.rows[0];
-  //verificar se a senha e valida
+  
   const validatePassword = await comparePassword(password, user.password);
   // se nao for valida retorna um erro
   if (!validatePassword) {

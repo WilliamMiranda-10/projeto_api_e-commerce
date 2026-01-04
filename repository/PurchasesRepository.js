@@ -1,4 +1,4 @@
-import pool from "../config/db.js";
+import pool from "./db.js";
 import BaseRepository from "./BaseRepository.js";
 
 class PurchasesRepository extends BaseRepository {

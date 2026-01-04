@@ -1,4 +1,4 @@
-import PurchasesRepository from "../repository/purchasesRepository.js";
+import PurchasesRepository from "../repository/PurchasesRepository.js";
 
 class PurchasesController {
   async create(req, res) {
