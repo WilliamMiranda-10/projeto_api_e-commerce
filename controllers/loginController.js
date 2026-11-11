@@ -25,6 +25,7 @@ export async function login(req, res) {
   // se nao for valida retorna um erro
   if (!validatePassword) {
     res.status(401).json({ erro: "Senha inválida." });
+    return
   }
   //chamar function gerarToken e passa email e id
   const token = gerarToken({

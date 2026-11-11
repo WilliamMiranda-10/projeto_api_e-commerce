@@ -1,16 +1,16 @@
+import { validateDatabaseIdentifiers } from "../utils/validateDatabaseIdentifiers.js";
 import pool from "./db.js";
 
 class BaseRepository {
   async getAll(table, columnsArray) {
-    try {
-      const results = (
-        await pool.query(`SELECT ${columnsArray.join(", ")} FROM ${table}`)
-      ).rows;
-      return results;
-    } catch (error) {
-      throw error;
-    }
+    validateDatabaseIdentifiers(table, columnsArray);
+
+    const results = (
+      await pool.query(`SELECT ${columnsArray.join(", ")} FROM ${table}`)
+    ).rows;
+    return results;
   }
+
   async getById(table, columnsArray, id) {
     try {
       const queryText = `SELECT ${columnsArray.join(
@@ -22,6 +22,7 @@ class BaseRepository {
       throw error;
     }
   }
+
   async insertInto(table, columnsArray, valuesArray) {
     const client = await pool.connect();
     try {
