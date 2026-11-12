@@ -2,60 +2,40 @@ import BaseRepository from "./BaseRepository.js";
 
 class UserRepository extends BaseRepository {
   async getAll() {
-    try {
-      const result = await super.getAll("users", [
-        "id",
-        "name",
-        "surname",
-        "email",
-      ]);
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    const result = await super.getAll("users", [
+      "id",
+      "name",
+      "surname",
+      "email",
+    ]);
+    return result;
   }
   async getById(id) {
-    try {
-      const result = await super.getById(
-        "users",
-        ["id", "name", "surname", "email"],
-        id
-      );
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    const result = await super.getById(
+      "users",
+      ["id", "name", "surname", "email"],
+      id
+    );
+    return result;
   }
   async insertInto(valuesArray) {
-    try {
-      const result = await super.insertInto(
-        "users",
-        ["name", "surname", "email", "password"],
-        valuesArray
-      );
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    const result = await super.insertInto(
+      "users",
+      ["name", "surname", "email", "password"],
+      valuesArray
+    );
+    return result;
   }
-  async updateUser(body, id){
-    try {
-      const result = await super.updateUser("users", body , id )
-      return result
-    } catch (error) {
-      throw error
-    }
+
+  async update(body, id) {
+    const result = await super.update("users", body, id);
+    return result;
   }
-  async deleteUser(id){
-    try {
-      const result = await super.deleteUser('users', id)
-      return result
-    } catch (error) {
-      throw error
-    }
+
+  async delete(id) {
+    const result = await super.delete("users", id);
+    return result;
   }
 }
 
 export default UserRepository;
-
-

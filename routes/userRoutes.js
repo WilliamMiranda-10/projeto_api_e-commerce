@@ -22,13 +22,13 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { body } = req;
 
-  await new UserRepository().updateUser(body, id);
+  await new UserRepository().update(body, id);
   res.status(200).send("Usuário Atualizado");
 });
 
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-  await new UserRepository().deleteUser(id);
+  await new UserRepository().delete(id);
   res.status(200).send("Usuário deletado");
 });
 

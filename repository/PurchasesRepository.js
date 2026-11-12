@@ -1,8 +1,10 @@
+import { validateDatabaseIdentifiers } from "../utils/validateDatabaseIdentifiers.js";
 import pool from "./db.js";
-import BaseRepository from "./BaseRepository.js";
 
-class PurchasesRepository extends BaseRepository {
+class PurchasesRepository {
   async createPurchases(purchasesData, products) {
+
+    validateDatabaseIdentifiers()
     const client = await pool.connect();
 
     try {

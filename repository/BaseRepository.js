@@ -12,47 +12,58 @@ class BaseRepository {
   }
 
   async getById(table, columnsArray, id) {
-    try {
-      const queryText = `SELECT ${columnsArray.join(
-        ", "
-      )} FROM ${table} WHERE id = $1`;
-      const results = (await pool.query(queryText, [id])).rows[0];
-      return results;
-    } catch (error) {
-      throw error;
-    }
+    validateDatabaseIdentifiers(table, columnsArray);
+    const queryText = `SELECT ${columnsArray.join(
+      ", "
+    )} FROM ${table} WHERE id = $1`;
+    const results = (await pool.query(queryText, [id])).rows[0];
+    return results;
   }
 
   async insertInto(table, columnsArray, valuesArray) {
+    if (columnsArray.length === 0) {
+      throw new Error("É necessário informar pelo menos uma coluna.");
+    }
+
+    validateDatabaseIdentifiers(table, columnsArray);
+
+    if (columnsArray.length !== valuesArray.length) {
+      throw new Error("A quantidade de colunas e valores não corresponde.");
+    }
+
     const client = await pool.connect();
+
     try {
       const flagsArray = Array.from(new Array(columnsArray.length).keys()).map(
         (element) => `$${element + 1}`
       );
-      console.log(flagsArray);
+
       const queryText = `INSERT INTO ${table} (${columnsArray.join(
         ", "
       )}) VALUES (${flagsArray.join(", ")})`;
-      await client.query("BEGIN TRANSACTION");
+
       await client.query(queryText, valuesArray);
-      await client.query("COMMIT");
-      console.log("Query:", queryText);
-      console.log("ValuesArray", valuesArray);
-    } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
     } finally {
       client.release();
     }
   }
 
-  async updateUser(table, body, id) {
+  async update(table, body, id) {
+    const columns = Object.keys(body);
+    const values = Object.values(body);
+
+    if (columns.length === 0) {
+      throw new Error("Nenhum campo informado para atualização.");
+    }
+
+    if (columns.includes("id")) {
+      throw new Error("O campo id não pode ser atualizado.");
+    }
+
+    validateDatabaseIdentifiers(table, columns);
+
     const client = await pool.connect();
-
     try {
-      const columns = Object.keys(body);
-      const values = Object.values(body);
-
       const setQuery = columns
         .map((col, index) => `${col} = $${index + 1}`)
         .join(", ");
@@ -61,32 +72,21 @@ class BaseRepository {
         columns.length + 1
       }`;
       values.push(id);
-      await client.query("BEGIN TRANSACTION");
-      await client.query(queryText, values);
-      await client.query("COMMIT");
 
-      console.log("Values:", values);
-      console.log("SetQuey:::", setQuery);
-      console.log("Query::: ", queryText);
-      console.log(columns.length + 1);
-    } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
+      await client.query(queryText, values);
     } finally {
       client.release();
     }
   }
 
-  async deleteUser(table, id) {
+  async delete(table, id) {
+    validateDatabaseIdentifiers(table, ["id"]);
     const client = await pool.connect();
+
     try {
       const queryText = `DELETE FROM ${table} WHERE id = $1`;
-      await client.query("BEGIN TRANSACTION");
+
       await client.query(queryText, [id]);
-      await client.query("COMMIT");
-    } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
     } finally {
       client.release();
     }

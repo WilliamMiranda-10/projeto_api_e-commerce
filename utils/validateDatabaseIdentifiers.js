@@ -1,6 +1,10 @@
 import { databaseTables } from "../config/databaseTables.js";
 
 export function validateDatabaseIdentifiers(table, columnsArray) {
+  if (!Array.isArray(columnsArray)) {
+    throw new Error("As colunas devem ser informadas em array.");
+  }
+
   if (!Object.hasOwn(databaseTables, table)) {
     throw new Error("Tabela não permitida.");
   }
