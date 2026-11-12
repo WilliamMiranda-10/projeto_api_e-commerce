@@ -3,8 +3,16 @@ import pool from "./db.js";
 
 class PurchasesRepository {
   async createPurchases(purchasesData, products) {
-
-    validateDatabaseIdentifiers()
+    validateDatabaseIdentifiers("purchases", [
+      "purchases_date",
+      "user_id",
+      "delivery_address",
+    ]);
+    validateDatabaseIdentifiers("purchasesproducts", [
+      "purchases_id",
+      "products_id",
+      "product_amount",
+    ]);
     const client = await pool.connect();
 
     try {
