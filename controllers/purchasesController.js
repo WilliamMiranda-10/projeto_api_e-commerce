@@ -5,6 +5,18 @@ class PurchasesController {
     try {
       const { purchases_date, delivery_address, products } = req.body;
 
+      const positiveInteger = products.every((item) => {
+        return Number.isInteger(item.product_amount) && item.product_amount > 0;
+      });
+
+      if (!positiveInteger) {
+        res
+          .status(400)
+          .json({ error: "A quantidade do produto deve ser maior que zero." });
+
+        return;
+      }
+
       if (!products || products.length === 0) {
         return res
           .status(400)
