@@ -34,7 +34,7 @@ class PurchasesController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Error ao criar compra" });
+      return res.status(500).json({ error: error.message });
     }
   }
 }

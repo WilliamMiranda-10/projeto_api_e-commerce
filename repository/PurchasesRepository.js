@@ -35,6 +35,23 @@ class PurchasesRepository {
       const purchaseId = purchasesResult.rows[0].id;
 
       for (const item of products) {
+        const validUUID = RegExp(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+        ).test(item.product_id);
+
+        if (!validUUID) {
+          throw new Error("ID do produto inválido.");
+        }
+
+        const productIdQuery = "SELECT id FROM products WHERE id = $1";
+        const productResult = await client.query(productIdQuery, [
+          item.product_id,
+        ]);
+
+        if (productResult.rowCount === 0) {
+          throw new Error("Produto não encontrado.");
+        }
+
         const purchasesProductsQuery = ` INSERT INTO purchasesproducts (purchases_id, products_id, product_amount)
          VALUES ($1, $2, $3)`;
 
