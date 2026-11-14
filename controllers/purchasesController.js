@@ -16,11 +16,9 @@ class PurchasesController {
       });
 
       if (!positiveInteger) {
-        res
+        return res
           .status(400)
           .json({ error: "A quantidade do produto deve ser maior que zero." });
-
-        return;
       }
 
       const result = await new PurchasesRepository().createPurchases(

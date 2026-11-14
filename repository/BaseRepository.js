@@ -40,9 +40,11 @@ class BaseRepository {
 
       const queryText = `INSERT INTO ${table} (${columnsArray.join(
         ", "
-      )}) VALUES (${flagsArray.join(", ")})`;
+      )}) VALUES (${flagsArray.join(", ")}) RETURNING *`;
 
-      await client.query(queryText, valuesArray);
+      const result = await client.query(queryText, valuesArray);
+
+      return result.rows;
     } finally {
       client.release();
     }
