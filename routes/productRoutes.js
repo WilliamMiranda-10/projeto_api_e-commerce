@@ -24,9 +24,7 @@ router.put("/:id", authMiddlewares, async (req, res) => {
 });
 
 router.delete("/:id", authMiddlewares, async (req, res) => {
-  const { id } = req.params;
-  await new ProductRepository().deleteProduct(id);
-  res.send("Usuário excluido");
+  return productsController.delete(req, res);
 });
 
 export default router;

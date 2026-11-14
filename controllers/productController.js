@@ -67,12 +67,19 @@ class ProductsController {
     }
   }
 
-  async delete(req, res){
-    
+  async delete(req, res) {
+    try {
+      const { id } = req.params;
+
+      await new ProductRepository().deleteProduct(id);
+
+      return res.status(200).json({ message: "Produto excluido." });
+    } catch (error) {
+      return res
+        .status(error.statusCode || 500)
+        .json({ error: error.message || "Erro interno do servidor" });
+    }
   }
 }
-
-
-
 
 export default ProductsController;

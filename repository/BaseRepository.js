@@ -94,7 +94,11 @@ class BaseRepository {
     try {
       const queryText = `DELETE FROM ${table} WHERE id = $1`;
 
-      await client.query(queryText, [id]);
+      const result = await client.query(queryText, [id]);
+
+      if (result.rowCount === 0) {
+        throw new AppError("Registro não encontrado para exclusão.", 404);
+      }
     } finally {
       client.release();
     }
