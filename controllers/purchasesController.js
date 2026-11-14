@@ -5,6 +5,12 @@ class PurchasesController {
     try {
       const { purchases_date, delivery_address, products } = req.body;
 
+      if (!products || products.length === 0) {
+        return res
+          .status(400)
+          .json({ error: "A Lista de produtos esta vazia!" });
+      }
+
       const positiveInteger = products.every((item) => {
         return Number.isInteger(item.product_amount) && item.product_amount > 0;
       });
@@ -15,12 +21,6 @@ class PurchasesController {
           .json({ error: "A quantidade do produto deve ser maior que zero." });
 
         return;
-      }
-
-      if (!products || products.length === 0) {
-        return res
-          .status(400)
-          .json({ error: "A Lista de produtos esta vazia!" });
       }
 
       const result = await new PurchasesRepository().createPurchases(
@@ -34,7 +34,9 @@ class PurchasesController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: error.message });
+      return res
+        .status(error.statusCode || 500)
+        .json({ error: error.message || "Erro interno do servidor" });
     }
   }
 }

@@ -1,3 +1,4 @@
+import AppError from "../errors/AppError.js";
 import { validateDatabaseIdentifiers } from "../utils/validateDatabaseIdentifiers.js";
 import pool from "./db.js";
 
@@ -40,7 +41,7 @@ class PurchasesRepository {
         ).test(item.product_id);
 
         if (!validUUID) {
-          throw new Error("ID do produto inválido.");
+          throw new AppError("ID do produto inválido.", 400);
         }
 
         const productIdQuery = "SELECT id FROM products WHERE id = $1";
@@ -49,7 +50,7 @@ class PurchasesRepository {
         ]);
 
         if (productResult.rowCount === 0) {
-          throw new Error("Produto não encontrado.");
+          throw new AppError("Produto não encontrado", 404);
         }
 
         const purchasesProductsQuery = ` INSERT INTO purchasesproducts (purchases_id, products_id, product_amount)
