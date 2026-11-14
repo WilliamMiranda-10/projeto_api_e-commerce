@@ -1,3 +1,4 @@
+import AppError from "../errors/AppError.js";
 import { validateDatabaseIdentifiers } from "../utils/validateDatabaseIdentifiers.js";
 import pool from "./db.js";
 
@@ -55,11 +56,11 @@ class BaseRepository {
     const values = Object.values(body);
 
     if (columns.length === 0) {
-      throw new Error("Nenhum campo informado para atualização.");
+      throw new AppError("Nenhum campo informado para atualização.", 400);
     }
 
     if (columns.includes("id")) {
-      throw new Error("O campo id não pode ser atualizado.");
+      throw new AppError("O campo id não pode ser atualizado.", 400);
     }
 
     validateDatabaseIdentifiers(table, columns);
@@ -72,10 +73,15 @@ class BaseRepository {
 
       const queryText = `UPDATE ${table} SET ${setQuery} WHERE id = $${
         columns.length + 1
-      }`;
+      } RETURNING *`;
       values.push(id);
 
-      await client.query(queryText, values);
+      const result = await client.query(queryText, values);
+
+      if (result.rowCount === 0) {
+        throw new AppError("Registro não encontrado para atualização.", 404);
+      }
+      return result.rows;
     } finally {
       client.release();
     }

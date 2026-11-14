@@ -49,6 +49,30 @@ class ProductsController {
         .json({ error: error.message || "Erro interno do servidor" });
     }
   }
+
+  async update(req, res) {
+    try {
+      const { body } = req;
+      const { id } = req.params;
+
+      const result = await new ProductRepository().updateProduct(body, id);
+
+      return res
+        .status(200)
+        .json({ message: "Produto atualizado com sucesso.", product: result });
+    } catch (error) {
+      return res
+        .status(error.statusCode || 500)
+        .json({ error: error.message || "Erro interno do servidor" });
+    }
+  }
+
+  async delete(req, res){
+    
+  }
 }
+
+
+
 
 export default ProductsController;
