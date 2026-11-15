@@ -31,7 +31,12 @@ class UserRepository extends BaseRepository {
   }
 
   async update(body, id) {
-    const result = await super.update("users", body, id);
+    const result = await super.update("users", body, id, [
+      "id",
+      "name",
+      "surname",
+      "email",
+    ]);
     return result;
   }
 

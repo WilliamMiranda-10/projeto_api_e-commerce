@@ -25,7 +25,7 @@ class UserRoutes {
         throw new AppError("Usuário não encontrado.", 404);
       }
 
-      res.status(200).json(result);
+      return res.status(200).json(result);
     } catch (error) {
       return res
         .status(error.statusCode || 500)
@@ -36,14 +36,11 @@ class UserRoutes {
   async createUser(req, res) {
     try {
       const { name, surname, email, password } = req.body;
-  
+
       if (!name || !surname || !email || !password) {
-        throw new AppError(
-          { message: "Preencha todos os campos corretamente!" },
-          400
-        );
+        throw new AppError("Preencha todos os campos corretamente!", 400);
       }
-  
+
       const passwordHash = await hashPassword(password);
       const userData = {
         name,
@@ -51,22 +48,62 @@ class UserRoutes {
         email,
         password: passwordHash,
       };
-  
+
       const valuesArray = Object.values(userData);
-  
+
       const result = await new UserRepository().insertInto(valuesArray);
-  
+
       return res
         .status(201)
         .json({ message: "Usuário criado com sucesso!", user: result });
+    } catch (error) {
+      if (error.code === "23505") {
+        return res.status(409).json({ message: "E-mail já cadastrado." });
+      }
+      return res
+        .status(error.statusCode || 500)
+        .json({ error: error.message || "Erro interno do servidor" });
+    }
+  }
+
+  async updateUser(req, res) {
+    try {
+      const { body } = req;
+      const { id } = req.params;
+
+      const result = await new UserRepository().update(body, id);
+
+      return res
+        .status(200)
+        .json({ message: "Usuário atualizado com sucesso.", user: result });
     } catch (error) {
       return res
         .status(error.statusCode || 500)
         .json({ error: error.message || "Erro interno do servidor" });
     }
   }
+
+  async deleteUser(req, res) {
+    try {
+      const { id } = req.params;
+
+      await new UserRepository().delete(id);
+
+      return res.status(200).json({ message: "Usuário excluído com sucesso." });
+    } catch (error) {
+      if (error.code === "23505") {
+        return res
+          .status(409)
+          .json({
+            message:
+              "Não foi possível atualizar: este e-mail já está cadastrado para outro usuário.",
+          });
+      }
+      return res
+        .status(error.statusCode || 500)
+        .json({ error: error.message || "Erro interno do servidor" });
+    }
+  }
 }
-
-
 
 export default UserRoutes;

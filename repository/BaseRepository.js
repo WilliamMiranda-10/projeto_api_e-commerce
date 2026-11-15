@@ -57,7 +57,7 @@ class BaseRepository {
     }
   }
 
-  async update(table, body, id) {
+  async update(table, body, id, returningColumns = ["*"]) {
     const columns = Object.keys(body);
     const values = Object.values(body);
 
@@ -67,6 +67,10 @@ class BaseRepository {
 
     if (columns.includes("id")) {
       throw new AppError("O campo id não pode ser atualizado.", 400);
+    }
+
+    if (!returningColumns.includes("*")) {
+      validateDatabaseIdentifiers(table, returningColumns);
     }
 
     validateDatabaseIdentifiers(table, columns);
@@ -79,7 +83,7 @@ class BaseRepository {
 
       const queryText = `UPDATE ${table} SET ${setQuery} WHERE id = $${
         columns.length + 1
-      } RETURNING *`;
+      } RETURNING ${returningColumns.join(", ")}`;
       values.push(id);
 
       const result = await client.query(queryText, values);
