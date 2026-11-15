@@ -10,6 +10,7 @@ class UserRepository extends BaseRepository {
     ]);
     return result;
   }
+
   async getById(id) {
     const result = await super.getById(
       "users",
@@ -18,11 +19,13 @@ class UserRepository extends BaseRepository {
     );
     return result;
   }
+
   async insertInto(valuesArray) {
     const result = await super.insertInto(
       "users",
       ["name", "surname", "email", "password"],
-      valuesArray
+      valuesArray,
+      ["id", "name", "surname", "email"]
     );
     return result;
   }

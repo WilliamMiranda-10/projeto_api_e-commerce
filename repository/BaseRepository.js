@@ -21,12 +21,16 @@ class BaseRepository {
     return results;
   }
 
-  async insertInto(table, columnsArray, valuesArray) {
+  async insertInto(table, columnsArray, valuesArray, returningColumns = ["*"]) {
     if (columnsArray.length === 0) {
       throw new Error("É necessário informar pelo menos uma coluna.");
     }
 
     validateDatabaseIdentifiers(table, columnsArray);
+
+    if (!returningColumns.includes("*")) {
+      validateDatabaseIdentifiers(table, returningColumns);
+    }
 
     if (columnsArray.length !== valuesArray.length) {
       throw new Error("A quantidade de colunas e valores não corresponde.");
@@ -41,7 +45,9 @@ class BaseRepository {
 
       const queryText = `INSERT INTO ${table} (${columnsArray.join(
         ", "
-      )}) VALUES (${flagsArray.join(", ")}) RETURNING *`;
+      )}) VALUES (${flagsArray.join(", ")}) RETURNING ${returningColumns.join(
+        ", "
+      )}`;
 
       const result = await client.query(queryText, valuesArray);
 

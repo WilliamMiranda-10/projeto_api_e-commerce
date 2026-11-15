@@ -1,36 +1,72 @@
 import { hashPassword } from "../utils/hashPassword.js";
 import UserRepository from "../repository/UserRepository.js";
+import AppError from "../errors/AppError.js";
 
-export async function createUser(req, res) {
-  
-  const { name, surname, email, password } = req.body;
+class UserRoutes {
+  async getAll(req, res) {
+    try {
+      const result = await new UserRepository().getAll();
 
-  if (!name || !surname || !email || !password) {
-    return res.status(400).json({
-      message: "Preencha todos os campos corretamente!",
-    });
+      return res.status(200).json(result);
+    } catch (error) {
+      return res
+        .status(error.statusCode || 500)
+        .json({ error: error.message || "Erro interno do servidor" });
+    }
   }
 
-  const passwordHash = await hashPassword(password);
+  async getById(req, res) {
+    try {
+      const { id } = req.params;
 
-  const userData = {
-    name,
-    surname,
-    email,
-    password: passwordHash,
-  };
+      const result = await new UserRepository().getById(id);
 
-  const valuesArray = Object.values(userData);
+      if (!result) {
+        throw new AppError("Usuário não encontrado.", 404);
+      }
 
-  const userRepository = new UserRepository();
-  await userRepository.insertInto(valuesArray);
+      res.status(200).json(result);
+    } catch (error) {
+      return res
+        .status(error.statusCode || 500)
+        .json({ error: error.message || "Erro interno do servidor" });
+    }
+  }
 
-  res.status(201).json({ message: "Usuário criado com sucesso!" });
+  async createUser(req, res) {
+    try {
+      const { name, surname, email, password } = req.body;
+  
+      if (!name || !surname || !email || !password) {
+        throw new AppError(
+          { message: "Preencha todos os campos corretamente!" },
+          400
+        );
+      }
+  
+      const passwordHash = await hashPassword(password);
+      const userData = {
+        name,
+        surname,
+        email,
+        password: passwordHash,
+      };
+  
+      const valuesArray = Object.values(userData);
+  
+      const result = await new UserRepository().insertInto(valuesArray);
+  
+      return res
+        .status(201)
+        .json({ message: "Usuário criado com sucesso!", user: result });
+    } catch (error) {
+      return res
+        .status(error.statusCode || 500)
+        .json({ error: error.message || "Erro interno do servidor" });
+    }
+  }
 }
 
-// receber os dados da requisição
-// validar os dados obrigatórios
-// verificar se o usuário já existe no banco
-// gerar hash da senha
-// salvar o usuário com o hash no banco
-// retornar resposta sem a senha
+
+
+export default UserRoutes;

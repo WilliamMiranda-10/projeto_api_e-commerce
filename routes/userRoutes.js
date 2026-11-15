@@ -1,22 +1,17 @@
 import { Router } from "express";
 import UserRepository from "../repository/UserRepository.js";
-import { createUser } from "../controllers/userController.js";
+import UserRoutes from "../controllers/userController.js";
+import { authMiddlewares } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  const result = await new UserRepository().getAll();
-  res.status(200).send(result);
-});
+const userRoutes = new UserRoutes();
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const result = await new UserRepository().getById(id);
-  res.status(200).send(result);
-});
+router.get("/", userRoutes.getAll.bind(userRoutes));
 
-router.post("/", createUser);
+router.get("/:id", userRoutes.getById.bind(userRoutes));
 
+router.post("/", authMiddlewares, userRoutes.createUser.bind(userRoutes));
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
