@@ -7,24 +7,26 @@ const router = Router();
 
 const productsController = new ProductsController();
 
-router.get("/", async (req, res) => {
-  return productsController.getAll(req, res);
-});
+router.get("/", productsController.getAll.bind(productsController));
 
-router.get("/:id", async (req, res) => {
-  return productsController.getById(req, res);
-});
+router.get("/:id", productsController.getById.bind(productsController));
 
-router.post("/", authMiddlewares, async (req, res) => {
-  return productsController.store(req, res);
-});
+router.post(
+  "/",
+  authMiddlewares,
+  productsController.store.bind(productsController)
+);
 
-router.put("/:id", authMiddlewares, async (req, res) => {
-  return productsController.update(req, res);
-});
+router.put(
+  "/:id",
+  authMiddlewares,
+  productsController.update.bind(productsController)
+);
 
-router.delete("/:id", authMiddlewares, async (req, res) => {
-  return productsController.delete(req, res);
-});
+router.delete(
+  "/:id",
+  authMiddlewares,
+  productsController.delete.bind(productsController)
+);
 
 export default router;
