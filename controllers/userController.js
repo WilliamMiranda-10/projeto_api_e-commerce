@@ -2,7 +2,7 @@ import { hashPassword } from "../utils/hashPassword.js";
 import UserRepository from "../repository/UserRepository.js";
 import AppError from "../errors/AppError.js";
 
-class UserRoutes {
+class UserController {
   async getAll(req, res) {
     try {
       const result = await new UserRepository().getAll();
@@ -39,6 +39,13 @@ class UserRoutes {
 
       if (!name || !surname || !email || !password) {
         throw new AppError("Preencha todos os campos corretamente!", 400);
+      }
+      if (!email.includes("@")) {
+        throw new AppError("Email inválido.");
+      }
+
+      if (password.length < 6) {
+        throw new AppError("A senha deve ter pelo menos 6 caracteres.");
       }
 
       const passwordHash = await hashPassword(password);
@@ -89,6 +96,13 @@ class UserRoutes {
         .status(200)
         .json({ message: "Usuário atualizado com sucesso.", user: result });
     } catch (error) {
+      if (error.code === "23505") {
+        return res.status(409).json({
+          message:
+            "Não foi possível atualizar: este e-mail já está cadastrado para outro usuário.",
+        });
+      }
+
       return res
         .status(error.statusCode || 500)
         .json({ error: error.message || "Erro interno do servidor" });
@@ -103,12 +117,6 @@ class UserRoutes {
 
       return res.status(200).json({ message: "Usuário excluído com sucesso." });
     } catch (error) {
-      if (error.code === "23505") {
-        return res.status(409).json({
-          message:
-            "Não foi possível atualizar: este e-mail já está cadastrado para outro usuário.",
-        });
-      }
       return res
         .status(error.statusCode || 500)
         .json({ error: error.message || "Erro interno do servidor" });
@@ -116,4 +124,4 @@ class UserRoutes {
   }
 }
 
-export default UserRoutes;
+export default UserController;

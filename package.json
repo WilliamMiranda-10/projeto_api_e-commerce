@@ -6,7 +6,8 @@
     "env": "^0.0.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.3",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "zod": "^4.6.7"
   },
   "name": "projetoapidb",
   "version": "1.0.0",
