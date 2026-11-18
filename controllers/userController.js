@@ -71,7 +71,19 @@ class UserRoutes {
       const { body } = req;
       const { id } = req.params;
 
-      const result = await new UserRepository().update(body, id);
+      const userData = { ...body };
+
+      if ("password" in userData && userData.password.trim() === "") {
+        throw new AppError("A senha não pode estar vazia.", 400);
+      }
+
+      if ("password" in userData) {
+        const passwordHash = await hashPassword(userData.password);
+
+        userData.password = passwordHash;
+      }
+
+      const result = await new UserRepository().update(userData, id);
 
       return res
         .status(200)
@@ -92,12 +104,10 @@ class UserRoutes {
       return res.status(200).json({ message: "Usuário excluído com sucesso." });
     } catch (error) {
       if (error.code === "23505") {
-        return res
-          .status(409)
-          .json({
-            message:
-              "Não foi possível atualizar: este e-mail já está cadastrado para outro usuário.",
-          });
+        return res.status(409).json({
+          message:
+            "Não foi possível atualizar: este e-mail já está cadastrado para outro usuário.",
+        });
       }
       return res
         .status(error.statusCode || 500)
