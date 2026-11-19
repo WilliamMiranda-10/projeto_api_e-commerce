@@ -1,32 +1,35 @@
 import { Router } from "express";
 import UserController from "../controllers/userController.js";
 import { authMiddlewares } from "../middlewares/authMiddleware.js";
+import validateSchema from "../middlewares/validateSchema.js";
+import { createUserSchema, updateUserSchema } from "../schemas/userSchema.js";
 
 const router = Router();
 
-const UserController = new UserController();
+const userController = new UserController();
 
-router.get("/", UserController.getAll.bind(UserController));
+router.get("/", userController.getAll.bind(userController));
 
-router.get("/:id", UserController.getById.bind(UserController));
+router.get("/:id", userController.getById.bind(userController));
 
 router.post(
   "/",
   authMiddlewares,
-  UserController.createUser.bind(UserController)
+  validateSchema(createUserSchema),
+  userController.createUser.bind(userController)
 );
 
 router.put(
   "/:id",
   authMiddlewares,
-  UserController.updateUser.bind(UserController)
+  validateSchema(updateUserSchema),
+  userController.updateUser.bind(userController)
 );
 
 router.delete(
   "/:id",
   authMiddlewares,
-  UserController.deleteUser.bind(UserController)
+  userController.deleteUser.bind(userController)
 );
 
 export default router;
-
