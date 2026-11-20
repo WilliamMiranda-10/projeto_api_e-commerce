@@ -12,3 +12,4 @@ export const updateUserSchema = createUserSchema
   .refine((data) => Object.keys(data).length > 0, {
     message: "Preencha pelo menos um campo para atualizar",
   });
+
