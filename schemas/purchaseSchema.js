@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const createPurchaseSchema = z.object({
-  purchases_date: z.iso.date(),
+  purchases_date: z.iso.date(
+    "Data inválida. Use o formato AAAA-MM-DD (ex.: 1900-01-01)."
+  ),
   delivery_address: z
     .string()
     .trim()
@@ -9,7 +11,7 @@ export const createPurchaseSchema = z.object({
   products: z
     .array(
       z.object({
-        product_id: z.uuidv4(),
+        product_id: z.uuidv4("ID do produto inválido. Informe um UUID válido."),
         product_amount: z
           .number()
           .int()
