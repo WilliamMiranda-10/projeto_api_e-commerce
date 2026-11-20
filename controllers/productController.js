@@ -34,9 +34,9 @@ class ProductsController {
 
   async store(req, res) {
     try {
-      const { name, price_in_cents, size } = req.body;
+      const { name, price_in_cents, amount } = req.body;
 
-      const valuesArray = [name, price_in_cents, size];
+      const valuesArray = [name, price_in_cents, amount];
 
       const result = await new ProductRepository().insertInto(valuesArray);
 

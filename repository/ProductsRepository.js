@@ -6,14 +6,14 @@ class ProductRepository extends BaseRepository {
       "id",
       "name",
       "price_in_cents",
-      "size",
+      "amount",
     ]);
     return result;
   }
   async getById(id) {
     const result = await super.getById(
       "products",
-      ["id", "name", "price_in_cents", "size"],
+      ["id", "name", "price_in_cents", "amount"],
       id
     );
     return result;
@@ -21,7 +21,7 @@ class ProductRepository extends BaseRepository {
   async insertInto(valuesArray) {
     const result = await super.insertInto(
       "products",
-      ["name", "price_in_cents", "size"],
+      ["name", "price_in_cents", "amount"],
       valuesArray
     );
     return result;
