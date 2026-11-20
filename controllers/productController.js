@@ -75,6 +75,12 @@ class ProductsController {
 
       return res.status(200).json({ message: "Produto excluido." });
     } catch (error) {
+      if (error.code === "23503") {
+        return res.status(409).json({
+          error:
+            "Não foi possível excluir este produto porque ele está vinculado a compras.",
+        });
+      }
       return res
         .status(error.statusCode || 500)
         .json({ error: error.message || "Erro interno do servidor" });
