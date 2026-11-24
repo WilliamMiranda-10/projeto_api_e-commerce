@@ -36,14 +36,6 @@ class PurchasesRepository {
       const purchaseId = purchasesResult.rows[0].id;
 
       for (const item of products) {
-        const validUUID = RegExp(
-          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-        ).test(item.product_id);
-
-        if (!validUUID) {
-          throw new AppError("ID do produto inválido.", 400);
-        }
-
         const productIdQuery = "SELECT id FROM products WHERE id = $1";
         const productResult = await client.query(productIdQuery, [
           item.product_id,
@@ -53,7 +45,7 @@ class PurchasesRepository {
           throw new AppError("Produto não encontrado", 404);
         }
 
-        const purchasesProductsQuery = ` INSERT INTO purchasesproducts (purchases_id, products_id, product_amount)
+        const purchasesProductsQuery = `INSERT INTO purchasesproducts (purchases_id, products_id, product_amount)
          VALUES ($1, $2, $3)`;
 
         await client.query(purchasesProductsQuery, [
@@ -67,7 +59,11 @@ class PurchasesRepository {
 
       return { purchaseId };
     } catch (error) {
-      await client.query("ROLLBACK");
+      try {
+        await client.query("ROLLBACK");
+      } catch (rollbackError) {
+        console.error("Erro ao executar ROLLBACK:", rollbackError);
+      }
       throw error;
     } finally {
       client.release();
