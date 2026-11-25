@@ -24,6 +24,20 @@ export function authMiddlewares(req, res, next) {
     req.user = decoded;
     next();
   } catch (error) {
-    res.status(401).json({ message: "Token inválido ou expirado!" });
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ message: "Token expirado." });
+    } else if (
+      error instanceof jwt.JsonWebTokenError ||
+      error instanceof jwt.NotBeforeError
+    ) {
+      return res
+        .status(401)
+        .json({ message: "Token inválido ou ainda não autorizado." });
+    } else {
+      console.error(error);
+      return res.status(500).json({
+        message: "Erro interno no servidor.",
+      });
+    }
   }
 }
