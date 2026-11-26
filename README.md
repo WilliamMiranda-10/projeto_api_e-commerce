@@ -73,7 +73,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=seu_usuario
 DB_PASSWORD=sua_senha
-DB_NAME=seu_banco
+DB_DATABASE=seu_banco
 ```
 
 > ⚠️ O arquivo `.env` não é versionado por segurança.
