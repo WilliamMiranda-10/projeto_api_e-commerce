@@ -19,6 +19,10 @@ class UserController {
     try {
       const { id } = req.params;
 
+      if (id !== req.user.id) {
+        return res.status(403).json({ message: "Acesso negado!" });
+      }
+
       const result = await new UserRepository().getById(id);
 
       if (!result) {

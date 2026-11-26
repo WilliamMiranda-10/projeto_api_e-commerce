@@ -8,9 +8,13 @@ const router = Router();
 
 const userController = new UserController();
 
-router.get("/", userController.getAll.bind(userController));
+router.get("/", authMiddlewares, userController.getAll.bind(userController));
 
-router.get("/:id", userController.getById.bind(userController));
+router.get(
+  "/:id",
+  authMiddlewares,
+  userController.getById.bind(userController)
+);
 
 router.post(
   "/",
