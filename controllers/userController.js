@@ -78,6 +78,10 @@ class UserController {
       const { body } = req;
       const { id } = req.params;
 
+      if (id !== req.user.id) {
+        return res.status(403).json({ message: "Acesso negado!" });
+      }
+
       const userData = { ...body };
 
       if ("password" in userData && userData.password.trim() === "") {
@@ -112,6 +116,10 @@ class UserController {
   async deleteUser(req, res) {
     try {
       const { id } = req.params;
+
+      if (id !== req.user.id) {
+        return res.status(403).json({ message: "Acesso negado!" });
+      }
 
       await new UserRepository().delete(id);
 
