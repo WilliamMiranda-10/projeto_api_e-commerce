@@ -7,6 +7,12 @@ import { createPurchaseSchema } from "../schemas/purchaseSchema.js";
 const router = Router();
 const purchasesContoller = new PurchasesController();
 
+router.get(
+  "/:id",
+  authMiddlewares,
+  purchasesContoller.getAllPurchases.bind(purchasesContoller)
+);
+
 router.post(
   "/",
   authMiddlewares,

@@ -1,6 +1,20 @@
 import PurchasesRepository from "../repository/PurchasesRepository.js";
 
 class PurchasesController {
+  async getAllPurchases(req, res) {
+    try {
+      const { id } = req.params;
+
+      if (id !== req.user.id) {
+        res.status(403).json({ message: "Acesso negado!" });
+      }
+
+      const result = await new PurchasesRepository().getAllPurchases(id);
+
+      return res.status(200).json(result);
+    } catch (error) {}
+  }
+
   async create(req, res) {
     try {
       const { purchases_date, delivery_address, products } = req.body;

@@ -3,6 +3,13 @@ import { validateDatabaseIdentifiers } from "../utils/validateDatabaseIdentifier
 import pool from "./db.js";
 
 class PurchasesRepository {
+  async getAllPurchases(id) {
+    const queryText = `SELECT * FROM purchases WHERE id = $1 `;
+
+    const result = await pool.query(queryText, [id]);
+    return result.rows;
+  }
+
   async createPurchases(purchasesData, products) {
     validateDatabaseIdentifiers("purchases", [
       "purchases_date",
