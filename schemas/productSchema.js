@@ -8,12 +8,14 @@ export const createProductSchema = z.object({
     .number({
       error: "O preço deve ser um número válido.",
     })
-    .min(1, "O preço deve ser maior que 0."),
+    .int("O preço deve ser um número inteiro.")
+    .min(1, "O preço deve ser maior que zero."),
   amount: z
     .number({
       error: "A quantidade deve ser um número válido.",
     })
-    .min(1, "A quantidade deve ser maior que 0."),
+    .int("A quantidade deve ser um número inteiro.")
+    .min(1, "A quantidade deve ser maior que zero."),
 });
 
 export const updateProductSchema = createProductSchema
